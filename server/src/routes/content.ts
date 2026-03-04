@@ -43,7 +43,7 @@ router.get('/all', authMiddleware, async (_req: AuthRequest, res: Response): Pro
 router.get('/:id', async (req: Request, res: Response): Promise<void> => {
     try {
         const content = await prisma.content.findUnique({
-            where: { id: req.params.id },
+            where: { id: req.params.id as string },
             include: {
                 comments: {
                     where: { parentId: null },
@@ -109,7 +109,7 @@ router.put('/:id', authMiddleware, async (req: AuthRequest, res: Response): Prom
         const { title, description, body, type, mediaUrl, thumbnailUrl, published } = req.body;
 
         const content = await prisma.content.update({
-            where: { id: req.params.id },
+            where: { id: req.params.id as string },
             data: {
                 ...(title !== undefined && { title }),
                 ...(description !== undefined && { description }),
@@ -131,7 +131,7 @@ router.put('/:id', authMiddleware, async (req: AuthRequest, res: Response): Prom
 // DELETE /api/content/:id — delete content (admin only)
 router.delete('/:id', authMiddleware, async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-        await prisma.content.delete({ where: { id: req.params.id } });
+        await prisma.content.delete({ where: { id: req.params.id as string } });
         res.json({ message: 'Contenido eliminado' });
     } catch (error) {
         console.error('Error deleting content:', error);

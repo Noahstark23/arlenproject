@@ -10,7 +10,7 @@ router.get('/:contentId', async (req: Request, res: Response): Promise<void> => 
         const orderBy: any = sort === 'likes' ? { likes: 'desc' } : { createdAt: sort === 'oldest' ? 'asc' : 'desc' };
 
         const comments = await prisma.comment.findMany({
-            where: { contentId: req.params.contentId, parentId: null },
+            where: { contentId: req.params.contentId as string, parentId: null },
             orderBy,
             include: {
                 replies: {
@@ -85,7 +85,7 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
 router.post('/:id/like', async (req: Request, res: Response): Promise<void> => {
     try {
         const comment = await prisma.comment.update({
-            where: { id: req.params.id },
+            where: { id: req.params.id as string },
             data: { likes: { increment: 1 } },
         });
 
