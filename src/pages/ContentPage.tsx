@@ -85,11 +85,17 @@ export default function ContentPage() {
                 </div>
 
                 {/* Media Player */}
-                {content.type === ContentType.PODCAST && content.mediaUrl && (
-                    <PodcastPlayer url={content.mediaUrl} title={content.title} />
-                )}
-                {content.type === ContentType.VIDEO && content.mediaUrl && (
-                    <VideoPlayer url={content.mediaUrl} />
+                {content.mediaUrl && (
+                    <div style={{ marginBottom: '2rem' }}>
+                        {(content.type === ContentType.VIDEO ||
+                            content.mediaUrl.includes('youtube.com') ||
+                            content.mediaUrl.includes('youtu.be') ||
+                            content.mediaUrl.includes('vimeo.com')) ? (
+                            <VideoPlayer url={content.mediaUrl} />
+                        ) : content.type === ContentType.PODCAST ? (
+                            <PodcastPlayer url={content.mediaUrl} title={content.title} />
+                        ) : null}
+                    </div>
                 )}
 
                 {/* Description */}
