@@ -100,9 +100,23 @@ export default function ContentPage() {
                 {/* Body */}
                 {content.body && (
                     <div className="content-page-body">
-                        {content.body.split('\n').map((p, i) => (
-                            <p key={i}>{p}</p>
-                        ))}
+                        {content.body.split('\n').map((p, i) => {
+                            const ytMatch = p.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+                            if (ytMatch) {
+                                const embedUrl = `https://www.youtube.com/embed/${ytMatch[1]}`;
+                                return (
+                                    <div key={i} className="video-container" style={{ margin: '2rem 0' }}>
+                                        <iframe
+                                            src={embedUrl}
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                            title="YouTube Video"
+                                        />
+                                    </div>
+                                );
+                            }
+                            return <p key={i}>{p}</p>;
+                        })}
                     </div>
                 )}
 
