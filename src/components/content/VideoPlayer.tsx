@@ -15,8 +15,14 @@ function getEmbedUrl(url: string): string | null {
 }
 
 export default function VideoPlayer({ url }: Props) {
-    const apiUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3001';
-    const fullUrl = url.startsWith('/') ? `${apiUrl}${url}` : url;
+    const apiBaseUrl = (() => {
+        try {
+            return new URL(import.meta.env.VITE_API_URL || 'http://localhost:3001').origin;
+        } catch {
+            return 'http://localhost:3001';
+        }
+    })();
+    const fullUrl = url.startsWith('/') ? `${apiBaseUrl}${url}` : url;
     const embedUrl = getEmbedUrl(fullUrl);
 
     return (

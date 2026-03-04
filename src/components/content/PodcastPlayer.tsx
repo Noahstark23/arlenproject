@@ -15,8 +15,14 @@ export default function PodcastPlayer({ url, title }: Props) {
     const [volume, setVolume] = useState(0.8);
     const [muted, setMuted] = useState(false);
 
-    const apiUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3001';
-    const fullUrl = url.startsWith('/') ? `${apiUrl}${url}` : url;
+    const apiBaseUrl = (() => {
+        try {
+            return new URL(import.meta.env.VITE_API_URL || 'http://localhost:3001').origin;
+        } catch {
+            return 'http://localhost:3001';
+        }
+    })();
+    const fullUrl = url.startsWith('/') ? `${apiBaseUrl}${url}` : url;
 
     useEffect(() => {
         const audio = audioRef.current;
